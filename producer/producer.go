@@ -39,8 +39,8 @@ func main() {
 		err = producer.Publish(topic, payload)
 		if err != nil {
 			log.Println(err)
-			time.Sleep(2 * time.Second)
 		}
+		time.Sleep(2 * time.Second)
 	}
 
 }
