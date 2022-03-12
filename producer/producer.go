@@ -20,6 +20,7 @@ func main() {
 	//Creating the Producer using NSQD Address
 	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
 	if err != nil {
+		log.Println("nsq se connect nahi hua", err)
 		log.Fatal(err)
 	}
 	//Init topic name and message
@@ -38,7 +39,7 @@ func main() {
 	for {
 		err = producer.Publish(topic, payload)
 		if err != nil {
-			log.Println(err)
+			log.Println("publish nhi hua", err)
 		}
 		time.Sleep(2 * time.Second)
 	}
