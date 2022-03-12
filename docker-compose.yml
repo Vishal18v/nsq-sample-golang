@@ -1,0 +1,54 @@
+# docker-compose.yml
+version: '3'
+services:
+  nsqlookupd:
+    image: nsqio/nsq
+    command: /nsqlookupd
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+    networks:
+      - abc
+  nsqd:
+    image: nsqio/nsq
+    command:  /nsqd --broadcast-address=nsqd --lookupd-tcp-address=nsqlookupd:4160
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4151:4151"
+      - "4150:4150"
+    networks:
+      - abc
+  nsqadmin:
+    image: nsqio/nsq
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd  
+    ports:
+      - "4171:4171"
+    networks:
+      - abc
+  
+  nsq-producer:
+    build: ./producer
+    depends_on:
+      - nsqlookupd
+      - nsqd
+      - nsqadmin
+    networks:
+      - abc
+  
+  nsq-consumer:
+    build: ./consumer
+    depends_on:
+      - nsqlookupd
+      - nsqd
+      - nsqadmin
+      - nsq-producer
+    networks:
+      - abc
+  
+networks:
+    abc:
+      
+
