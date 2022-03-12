@@ -35,8 +35,12 @@ func main() {
 		log.Println(err)
 	}
 	//Publish the Message
-	err = producer.Publish(topic, payload)
-	if err != nil {
-		log.Println(err)
+	for {
+		err = producer.Publish(topic, payload)
+		if err != nil {
+			log.Println(err)
+			time.Sleep(2 * time.Second)
+		}
 	}
+
 }
